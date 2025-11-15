@@ -1,409 +1,340 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Future Ready Learners – Main Journey</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Teach For India Journey | Fellowship Portfolio</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
   <style>
-    body { font-family:'Poppins',sans-serif; background:#f8fbfd; color:#0f172a; }
+    body { font-family: 'Poppins', sans-serif; }
 
-    /* Hero video background */
-    .hero-video-container {
-      position:relative;
-      height:70vh;
-      min-height:360px;
-      overflow:hidden;
-      background:#020617;
-    }
-    .hero-video-container iframe {
-      position:absolute;
-      top:50%; left:50%;
-      width:120%; height:120%;
-      transform:translate(-50%,-50%);
-      pointer-events:none; /* so clicks hit overlay buttons, not the iframe */
-    }
-    .hero-overlay {
-      position:relative;
-      z-index:10;
-      height:100%;
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      align-items:flex-start;
-      padding:1.5rem;
-      background:linear-gradient(to right,rgba(15,23,42,0.85),rgba(15,23,42,0.05));
-      color:white;
-    }
-
-    /* Timeline horizontal scroll */
-    .timeline-track {
-      display:flex;
-      gap:1rem;
-      overflow-x:auto;
-      padding-bottom:0.5rem;
-      scroll-snap-type:x mandatory;
+    /* timeline scroll container – hide scrollbar but allow JS scroll */
+    .timeline-scroll {
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+      position: relative;
     }
     .timeline-card {
-      min-width:210px;
-      max-width:230px;
-      scroll-snap-align:start;
+      min-width: 260px;
+      max-width: 260px;
     }
+    /* hide scrollbar on webkit */
+    .timeline-scroll::-webkit-scrollbar { display: none; }
 
-    /* Gallery auto sliding */
-    .gallery-strip {
-      overflow:hidden;
+    /* subtle hover scale on cards */
+    .theme-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(15,23,42,0.12);
     }
-    .gallery-track {
-      display:flex;
-      gap:12px;
-      animation:gallery-scroll 35s linear infinite;
-      width:max-content;
-    }
-    .gallery-track img {
-      height:180px;
-      width:auto;
-      border-radius:10px;
-      object-fit:cover;
-      box-shadow:0 8px 20px rgba(15,23,42,0.18);
-    }
-    .gallery-strip:hover .gallery-track {
-      animation-play-state:paused;
-    }
-    @keyframes gallery-scroll {
-      0% { transform:translateX(0); }
-      100% { transform:translateX(-50%); }
-    }
-
-    /* Modal */
-    .modal-backdrop {
-      position:fixed;
-      inset:0;
-      background:rgba(15,23,42,0.85);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      z-index:50;
-    }
-    .modal-hidden { display:none; }
   </style>
 </head>
-<body class="bg-slate-50">
+<body class="bg-slate-50 text-slate-900">
 
   <!-- NAVBAR -->
-  <nav class="bg-white/90 backdrop-blur shadow-sm sticky top-0 z-40">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
-      <!-- Logo / Name -->
-      <div class="flex items-center space-x-2">
-        <span class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-indigo-600 text-white text-lg font-bold">R</span>
-        <div class="leading-tight">
-          <div class="font-semibold text-slate-900 text-sm">Future Ready Learners</div>
-          <div class="text-xs text-slate-500">Teach For India Journey</div>
+  <header class="sticky top-0 z-20 bg-white/90 backdrop-blur border-b border-slate-200">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="w-9 h-9 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold text-lg">
+          R
+        </div>
+        <div>
+          <div class="font-semibold text-sm md:text-base">Teach For India Journey</div>
+          <div class="text-xs text-slate-500">Varsha Nagar MPS | 2024–26</div>
         </div>
       </div>
-      <!-- Links -->
-      <div class="hidden md:flex items-center space-x-5 text-sm font-medium">
-        <a href="#hero" class="text-slate-700 hover:text-indigo-600">Home</a>
-        <a href="https://iamvrajgopal.github.io/Approach/" class="text-slate-700 hover:text-indigo-600">The Beginning</a>
-        <a href="https://iamvrajgopal.github.io/Approach/" class="text-slate-700 hover:text-indigo-600">My Method</a>
-        <a href="https://iamvrajgopal.github.io/Impact/" class="text-slate-700 hover:text-indigo-600">Tech &amp; AI</a>
-        <a href="https://iamvrajgopal.github.io/impact_stories/" class="text-slate-700 hover:text-indigo-600">Impact Stories</a>
-        <a href="https://iamvrajgopal.github.io/futureReadyLearners/" class="text-slate-700 hover:text-indigo-600">Beyond Class</a>
-        <a href="#quote" class="text-slate-700 hover:text-indigo-600">Reflections</a>
-        <a href="#contact" class="text-slate-700 hover:text-indigo-600">Contact</a>
-      </div>
+      <nav class="hidden md:flex gap-5 text-sm font-medium text-slate-700">
+        <a href="#hero" class="hover:text-indigo-600">Home</a>
+        <a href="#beginning" class="hover:text-indigo-600">The Beginning</a>
+        <a href="#method" class="hover:text-indigo-600">My Method</a>
+        <a href="#tech-ai" class="hover:text-indigo-600">Tech &amp; AI</a>
+        <a href="#impact" class="hover:text-indigo-600">Impact Stories</a>
+        <a href="#future" class="hover:text-indigo-600">Future Ready Learners</a>
+        <a href="#reflections" class="hover:text-indigo-600">Reflections</a>
+        <a href="#contact" class="hover:text-indigo-600">Contact</a>
+      </nav>
     </div>
-  </nav>
+  </header>
 
   <!-- HERO SECTION -->
-  <section id="hero" class="hero-video-container">
-    <iframe
-      src="https://www.youtube.com/embed/TGjbV3XGtE8?autoplay=1&mute=1&loop=1&playlist=TGjbV3XGtE8&controls=0&modestbranding=1&rel=0"
-      title="Classroom Journey"
-      frameborder="0"
-      allow="autoplay; encrypted-media"
-      allowfullscreen
-    ></iframe>
-
-    <div class="hero-overlay max-w-6xl mx-auto">
-      <h1 class="text-3xl sm:text-5xl font-bold mb-3">Curiosity. Confidence. Compassion.</h1>
-      <p class="text-lg sm:text-xl max-w-xl text-slate-100 mb-6">
-        A two-year journey nurturing future-ready learners — from basic concepts to national recognition.
-      </p>
-      <div class="flex flex-wrap gap-3">
-        <a href="#timeline" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-lg text-sm font-semibold shadow-md">
-          Explore the Journey ↓
-        </a>
-        <button
-          id="openVideoModal"
-          class="bg-white/90 hover:bg-white text-indigo-700 px-5 py-2.5 rounded-lg text-sm font-semibold shadow-md flex items-center gap-2"
-        >
-          <span>Watch Class in Action</span> <span>▶️</span>
-        </button>
+  <section id="hero" class="bg-indigo-50">
+    <div class="max-w-6xl mx-auto px-4 py-10 md:py-14 flex flex-col md:flex-row items-center gap-8">
+      <!-- Video -->
+      <div class="md:w-3/5 w-full">
+        <div class="rounded-2xl overflow-hidden shadow-lg border border-indigo-100 bg-slate-900">
+          <video
+            src="hero-video.mp4"
+            autoplay
+            muted
+            loop
+            playsinline
+            class="w-full h-[230px] md:h-[320px] object-cover"
+          ></video>
+        </div>
+      </div>
+      <!-- Text + CTA -->
+      <div class="md:w-2/5 w-full text-center md:text-left">
+        <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900">
+          Teach For India Journey
+        </h1>
+        <p class="mt-4 text-slate-600 text-sm md:text-base max-w-md mx-auto md:mx-0">
+          A two-year fellowship journey blending academics, technology, and class culture to nurture future-ready learners.
+        </p>
+        <div class="mt-6 flex justify-center md:justify-start gap-3">
+          <a href="#journey-overview"
+             class="inline-flex items-center px-5 py-3 rounded-full bg-indigo-600 text-white text-sm font-semibold shadow-md hover:bg-indigo-700">
+            Explore the Journey
+          </a>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- IMPACT SNAPSHOT -->
-  <section class="max-w-6xl mx-auto px-6 lg:px-8 py-10">
-    <h2 class="text-2xl font-bold text-slate-900 mb-4">Impact Snapshot</h2>
-    <p class="text-slate-600 mb-6 text-sm md:text-base">
-      A quick overview of what this journey has meant for students in Varsha Nagar MPS.
-    </p>
-
-    <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
-      <div class="bg-white rounded-xl shadow-sm p-4 text-center">
-        <div class="text-2xl font-bold text-indigo-600">300+</div>
-        <div class="text-xs text-slate-500 mt-1">Hands-on experiments explored</div>
-      </div>
-      <div class="bg-white rounded-xl shadow-sm p-4 text-center">
-        <div class="text-2xl font-bold text-emerald-600">20</div>
-        <div class="text-xs text-slate-500 mt-1">Students in national AI competition</div>
-      </div>
-      <div class="bg-white rounded-xl shadow-sm p-4 text-center">
-        <div class="text-2xl font-bold text-amber-500">2</div>
-        <div class="text-xs text-slate-500 mt-1">National recognitions</div>
-      </div>
-      <div class="bg-white rounded-xl shadow-sm p-4 text-center">
-        <div class="text-2xl font-bold text-violet-500">25%</div>
-        <div class="text-xs text-slate-500 mt-1">Aspiring to build AI ventures</div>
-      </div>
-      <div class="bg-white rounded-xl shadow-sm p-4 text-center">
-        <div class="text-2xl font-bold text-teal-500">80%</div>
-        <div class="text-xs text-slate-500 mt-1">Reported better concept clarity</div>
+  <section class="bg-white border-y border-slate-200">
+    <div class="max-w-6xl mx-auto px-4 py-8 md:py-10">
+      <h2 class="text-xl md:text-2xl font-bold text-slate-900 mb-4">Impact Snapshot</h2>
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-4 text-center">
+        <div class="bg-indigo-50 rounded-xl py-4 px-2">
+          <div class="text-2xl font-bold text-indigo-700">300+</div>
+          <div class="text-xs text-slate-600 mt-1">Hands-on experiments<br/>researched</div>
+        </div>
+        <div class="bg-teal-50 rounded-xl py-4 px-2">
+          <div class="text-2xl font-bold text-teal-700">20</div>
+          <div class="text-xs text-slate-600 mt-1">Students in national<br/>AI competition</div>
+        </div>
+        <div class="bg-amber-50 rounded-xl py-4 px-2">
+          <div class="text-2xl font-bold text-amber-600">2</div>
+          <div class="text-xs text-slate-600 mt-1">National awards</div>
+        </div>
+        <div class="bg-violet-50 rounded-xl py-4 px-2">
+          <div class="text-2xl font-bold text-violet-600">25%</div>
+          <div class="text-xs text-slate-600 mt-1">Aspiring to build<br/>AI ventures</div>
+        </div>
+        <div class="bg-emerald-50 rounded-xl py-4 px-2 col-span-2 md:col-span-1">
+          <div class="text-2xl font-bold text-emerald-600">80%</div>
+          <div class="text-xs text-slate-600 mt-1">Improvement in<br/>concept clarity</div>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- JOURNEY TIMELINE -->
-  <section id="timeline" class="bg-slate-900 text-white py-10">
-    <div class="max-w-6xl mx-auto px-6 lg:px-8">
-      <h2 class="text-2xl font-bold mb-3">Journey Timeline</h2>
-      <p class="text-sm text-slate-300 mb-5">
-        From entering the classroom to building future-ready learners.
+  <!-- JOURNEY TIMELINE (auto-scroll, light background like banner) -->
+  <section id="journey-overview" class="bg-indigo-50">
+    <div class="max-w-6xl mx-auto px-4 py-10">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-xl md:text-2xl font-bold text-slate-900">Journey Timeline</h2>
+      </div>
+      <p class="text-sm text-slate-600 mb-4">
+        Scroll through the milestones of the fellowship journey — from entering the classroom to building future-ready learners.
       </p>
 
-      <div class="timeline-track">
-        <!-- 2024 Entering the Classroom -->
-        <div class="timeline-card bg-slate-800 rounded-xl shadow-sm overflow-hidden">
-          <img src="https://raw.githubusercontent.com/iamvrajgopal/TFIMainPage/main/PrevClass.jpg" class="w-full h-32 object-cover" alt="Entering classroom">
-          <div class="p-3">
-            <div class="text-xs text-slate-400">2024</div>
-            <div class="text-sm font-semibold">Entering the Classroom</div>
-            <p class="text-xs text-slate-300 mt-1">Understanding context, learning gaps and student realities.</p>
+      <div class="timeline-scroll rounded-2xl bg-white shadow-inner p-4">
+        <div class="flex gap-4 timeline-track">
+          <!-- Each card width: 260px -->
+          <div class="timeline-card bg-indigo-50 rounded-xl p-4 border border-indigo-100 flex-shrink-0">
+            <div class="text-xs text-slate-500 mb-1">2024</div>
+            <div class="font-semibold text-slate-900">Entering the Classroom</div>
+            <p class="text-xs text-slate-600 mt-2">Understanding student context, learning gaps and class culture.</p>
           </div>
-        </div>
 
-        <!-- Simplify Visualize Relate Implement -->
-        <div class="timeline-card bg-slate-800 rounded-xl shadow-sm overflow-hidden">
-          <img src="https://raw.githubusercontent.com/iamvrajgopal/TFIMainPage/main/SVRI.jpg" class="w-full h-32 object-cover" alt="SVRI">
-          <div class="p-3">
-            <div class="text-xs text-slate-400">2024–25</div>
-            <div class="text-sm font-semibold">Simplify. Visualize. Relate. Implement.</div>
-            <p class="text-xs text-slate-300 mt-1">Building conceptual foundations through experiments and simulations.</p>
+          <div class="timeline-card bg-sky-50 rounded-xl p-4 border border-sky-100 flex-shrink-0">
+            <div class="text-xs text-slate-500 mb-1">2024–25</div>
+            <div class="font-semibold text-slate-900">Simplify • Visualize • Relate • Implement</div>
+            <p class="text-xs text-slate-600 mt-2">Designing lesson flows that make concepts concrete and connected.</p>
           </div>
-        </div>
 
-        <!-- Be the Change AI/ML -->
-        <div class="timeline-card bg-slate-800 rounded-xl shadow-sm overflow-hidden">
-          <img src="https://raw.githubusercontent.com/iamvrajgopal/TFIMainPage/main/btcp.jpg" class="w-full h-32 object-cover" alt="BTCP">
-          <div class="p-3">
-            <div class="text-xs text-slate-400">2025</div>
-            <div class="text-sm font-semibold">Be the Change – AI/ML</div>
-            <p class="text-xs text-slate-300 mt-1">Students use AI/ML to solve real-world problems.</p>
+          <div class="timeline-card bg-teal-50 rounded-xl p-4 border border-teal-100 flex-shrink-0">
+            <div class="text-xs text-slate-500 mb-1">2025</div>
+            <div class="font-semibold text-slate-900">Be the Change — AI/ML</div>
+            <p class="text-xs text-slate-600 mt-2">Students build AI-powered projects with real-world applications.</p>
           </div>
-        </div>
 
-        <!-- National Recognition -->
-        <div class="timeline-card bg-slate-800 rounded-xl shadow-sm overflow-hidden">
-          <img src="https://raw.githubusercontent.com/iamvrajgopal/TFIMainPage/main/NAR.jpg" class="w-full h-32 object-cover" alt="National Recognition">
-          <div class="p-3">
-            <div class="text-xs text-slate-400">2025</div>
-            <div class="text-sm font-semibold">National Recognition & Impact</div>
-            <p class="text-xs text-slate-300 mt-1">From classroom ideas to national-level recognition.</p>
+          <div class="timeline-card bg-amber-50 rounded-xl p-4 border border-amber-100 flex-shrink-0">
+            <div class="text-xs text-slate-500 mb-1">2025</div>
+            <div class="font-semibold text-slate-900">National Recognition & Impact</div>
+            <p class="text-xs text-slate-600 mt-2">Top national honours for tech solutions solving social problems.</p>
           </div>
-        </div>
 
-        <!-- Future Ready Learners -->
-        <div class="timeline-card bg-slate-800 rounded-xl shadow-sm overflow-hidden">
-          <img src="https://raw.githubusercontent.com/iamvrajgopal/TFIMainPage/main/GroupJoy.jpg" class="w-full h-32 object-cover" alt="Future Ready Learners">
-          <div class="p-3">
-            <div class="text-xs text-slate-400">2025+</div>
-            <div class="text-sm font-semibold">Future Ready Learners</div>
-            <p class="text-xs text-slate-300 mt-1">Confident, compassionate leaders thinking beyond the classroom.</p>
+          <div class="timeline-card bg-emerald-50 rounded-xl p-4 border border-emerald-100 flex-shrink-0" id="future">
+            <div class="text-xs text-slate-500 mb-1">2025+</div>
+            <div class="font-semibold text-slate-900">Future Ready Learners</div>
+            <p class="text-xs text-slate-600 mt-2">Leadership, responsibility, empathy and career readiness.</p>
           </div>
         </div>
       </div>
+      <p class="text-xs text-slate-500 mt-2">Timeline auto-scrolls through three milestones at a time.</p>
+    </div>
+  </section>
 
-      <div class="mt-5">
-        <a href="#cards" class="inline-block bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg text-xs font-semibold">
-          Explore Full Journey ↓
+  <!-- EXPLORE THE JOURNEY (Thematic Cards – more aesthetic) -->
+  <section class="bg-white">
+    <div class="max-w-6xl mx-auto px-4 py-10">
+      <h2 class="text-xl md:text-2xl font-bold text-slate-900 mb-2">Explore the Journey</h2>
+      <p class="text-sm text-slate-600 mb-6">
+        Walk through each theme of the fellowship — from the first day in class to national impact and future-ready learners.
+      </p>
+
+      <div class="grid md:grid-cols-3 gap-5">
+        <!-- The Beginning -->
+        <a id="beginning" href="#"
+           class="theme-card bg-indigo-50 border border-indigo-100 rounded-2xl p-5 transition-transform">
+          <div class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-indigo-600 text-white text-lg mb-3">
+            1
+          </div>
+          <h3 class="font-semibold text-slate-900 mb-1">The Beginning</h3>
+          <p class="text-xs text-slate-600">
+            Entering Varsha Nagar MPS, understanding student context, learning gaps and aspirations.
+          </p>
+        </a>
+
+        <!-- My Method -->
+        <a id="method" href="#"
+           class="theme-card bg-sky-50 border border-sky-100 rounded-2xl p-5 transition-transform">
+          <div class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-sky-500 text-white text-lg mb-3">
+            2
+          </div>
+          <h3 class="font-semibold text-slate-900 mb-1">My Approach</h3>
+          <p class="text-xs text-slate-600">
+            The Simplify • Visualize • Relate • Implement framework and classroom planning.
+          </p>
+        </a>
+
+        <!-- Future Ready Learners -->
+        <a href="#"
+           class="theme-card bg-emerald-50 border border-emerald-100 rounded-2xl p-5 transition-transform">
+          <div class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-emerald-500 text-white text-lg mb-3">
+            3
+          </div>
+          <h3 class="font-semibold text-slate-900 mb-1">Future Ready Learners</h3>
+          <p class="text-xs text-slate-600">
+            Leadership, responsibility, teamwork and empathy built through class culture and events.
+          </p>
+        </a>
+
+        <!-- Tech & AI -->
+        <a id="tech-ai" href="#"
+           class="theme-card bg-teal-50 border border-teal-100 rounded-2xl p-5 transition-transform">
+          <div class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-teal-500 text-white text-lg mb-3">
+            4
+          </div>
+          <h3 class="font-semibold text-slate-900 mb-1">Be the Change — Tech & AI</h3>
+          <p class="text-xs text-slate-600">
+            AI/ML modules, simulations and student projects designed to solve real-world problems.
+          </p>
+        </a>
+
+        <!-- Impact Stories -->
+        <a id="impact" href="#"
+           class="theme-card bg-amber-50 border border-amber-100 rounded-2xl p-5 transition-transform">
+          <div class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-amber-500 text-white text-lg mb-3">
+            5
+          </div>
+          <h3 class="font-semibold text-slate-900 mb-1">Impact Stories</h3>
+          <p class="text-xs text-slate-600">
+            National competitions, recognition and student presentations to global leaders.
+          </p>
+        </a>
+
+        <!-- Reflections -->
+        <a id="reflections" href="#"
+           class="theme-card bg-violet-50 border border-violet-100 rounded-2xl p-5 transition-transform">
+          <div class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-violet-500 text-white text-lg mb-3">
+            6
+          </div>
+          <h3 class="font-semibold text-slate-900 mb-1">Reflections</h3>
+          <p class="text-xs text-slate-600">
+            Lessons learnt, challenges faced and next steps in educational impact.
+          </p>
         </a>
       </div>
     </div>
   </section>
 
-  <!-- THEMATIC PREVIEW CARDS -->
-  <section id="cards" class="max-w-6xl mx-auto px-6 lg:px-8 py-10">
-    <h2 class="text-2xl font-bold text-slate-900 mb-4">Explore the Journey</h2>
-    <p class="text-slate-600 text-sm md:text-base mb-6">
-      Dive into different dimensions of the fellowship journey — from entering the classroom to building tech-enabled solutions.
-    </p>
-
-    <div class="grid md:grid-cols-3 gap-5">
-      <!-- Card 1 -->
-      <a href="https://iamvrajgopal.github.io/Approach/" class="bg-white rounded-xl shadow-sm hover:shadow-md transition block overflow-hidden">
-        <img src="https://raw.githubusercontent.com/iamvrajgopal/TFIMainPage/main/PrevClass.jpg" class="w-full h-40 object-cover" alt="The Beginning">
-        <div class="p-4">
-          <h3 class="text-sm font-semibold text-slate-900">The Beginning</h3>
-          <p class="text-xs text-slate-600 mt-1">What the classroom looked like at the start — context, gaps and first steps.</p>
-        </div>
-      </a>
-
-      <!-- Card 2 -->
-      <a href="https://iamvrajgopal.github.io/Approach/" class="bg-white rounded-xl shadow-sm hover:shadow-md transition block overflow-hidden">
-        <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/StemTinkering.jpg" class="w-full h-40 object-cover" alt="My Approach">
-        <div class="p-4">
-          <h3 class="text-sm font-semibold text-slate-900">My Approach</h3>
-          <p class="text-xs text-slate-600 mt-1">The Simplify–Visualize–Relate–Implement framework in classroom action.</p>
-        </div>
-      </a>
-
-      <!-- Card 3 -->
-      <a href="https://iamvrajgopal.github.io/futureReadyLearners/" class="bg-white rounded-xl shadow-sm hover:shadow-md transition block overflow-hidden">
-        <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/EmpathynService.jpg" class="w-full h-40 object-cover" alt="Future Ready Learners">
-        <div class="p-4">
-          <h3 class="text-sm font-semibold text-slate-900">Future Ready Learners</h3>
-          <p class="text-xs text-slate-600 mt-1">Responsibilities, leadership and class culture shaping students as leaders.</p>
-        </div>
-      </a>
-
-      <!-- Card 4 -->
-      <a href="https://iamvrajgopal.github.io/Impact/" class="bg-white rounded-xl shadow-sm hover:shadow-md transition block overflow-hidden">
-        <img src="https://raw.githubusercontent.com/iamvrajgopal/tfi_future_ready_v1/main/Impact.jpg" class="w-full h-40 object-cover" alt="Be the Change – Tech & AI">
-        <div class="p-4">
-          <h3 class="text-sm font-semibold text-slate-900">Be the Change – Tech &amp; AI</h3>
-          <p class="text-xs text-slate-600 mt-1">AI/ML, simulations and tech projects that connect learning to real-world problems.</p>
-        </div>
-      </a>
-
-      <!-- Card 5 -->
-      <a href="https://iamvrajgopal.github.io/impact_stories/" class="bg-white rounded-xl shadow-sm hover:shadow-md transition block overflow-hidden md:col-span-1">
-        <img src="https://raw.githubusercontent.com/iamvrajgopal/TFIMainPage/main/NAR.jpg" class="w-full h-40 object-cover" alt="Impact Stories">
-        <div class="p-4">
-          <h3 class="text-sm font-semibold text-slate-900">Impact Stories</h3>
-          <p class="text-xs text-slate-600 mt-1">From ideas to national awards — real-world problem solving by students.</p>
-        </div>
-      </a>
-    </div>
-  </section>
-
   <!-- QUOTE BAND -->
-  <section id="quote" class="bg-gradient-to-r from-indigo-700 via-teal-600 to-emerald-500 py-10">
-    <div class="max-w-4xl mx-auto px-6 text-center text-white">
-      <p class="text-lg md:text-xl font-light">“Transformation begins when curiosity meets care.”</p>
+  <section class="bg-slate-900 text-white py-10">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <p class="text-lg md:text-xl font-light">
+        “Transformation begins when curiosity meets care.”
+      </p>
     </div>
   </section>
 
   <!-- GALLERY PREVIEW STRIP -->
-  <section class="max-w-6xl mx-auto px-6 lg:px-8 py-10">
-    <h2 class="text-2xl font-bold text-slate-900 mb-4">Gallery Preview</h2>
-    <p class="text-slate-600 text-sm md:text-base mb-4">
-      Glimpses from experiments, AI projects, competitions, sports and celebrations.
-    </p>
-
-    <div class="gallery-strip bg-slate-900/90 rounded-2xl p-4">
-      <div class="gallery-track">
-        <!-- One sequence -->
-        <img src="https://raw.githubusercontent.com/iamvrajgopal/TFIMainPage/main/Leaders.jpg" alt="Leaders">
-        <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/StudentActivity.jpeg" alt="Student activity">
-        <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/EmpathynService.jpg" alt="Empathy & Service">
-        <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/DiwaliPrepCollage.jpg" alt="Diwali prep">
-        <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/StemTinkering.jpg" alt="STEM tinkering">
-        <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/techSolution.jpg" alt="Tech solution">
-        <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/VNPL.jpeg" alt="VNPL">
-        <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/IPL.jpeg" alt="IPL visit">
-        <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/Artwork.jpeg" alt="Artwork">
-        <!-- Duplicate sequence for seamless loop -->
-        <img src="https://raw.githubusercontent.com/iamvrajgopal/TFIMainPage/main/Leaders.jpg" alt="">
-        <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/StudentActivity.jpeg" alt="">
-        <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/EmpathynService.jpg" alt="">
-        <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/DiwaliPrepCollage.jpg" alt="">
-        <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/StemTinkering.jpg" alt="">
-        <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/techSolution.jpg" alt="">
-        <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/VNPL.jpeg" alt="">
-        <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/IPL.jpeg" alt="">
-        <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/Artwork.jpeg" alt="">
+  <section class="bg-white">
+    <div class="max-w-6xl mx-auto px-4 py-10">
+      <h2 class="text-xl md:text-2xl font-bold text-slate-900 mb-4">Gallery Preview</h2>
+      <div class="flex gap-3 overflow-x-auto pb-2">
+        <!-- Replace with real images -->
+        <div class="flex-shrink-0 w-52 h-32 rounded-xl bg-slate-200"></div>
+        <div class="flex-shrink-0 w-52 h-32 rounded-xl bg-slate-200"></div>
+        <div class="flex-shrink-0 w-52 h-32 rounded-xl bg-slate-200"></div>
+        <div class="flex-shrink-0 w-52 h-32 rounded-xl bg-slate-200"></div>
+        <div class="flex-shrink-0 w-52 h-32 rounded-xl bg-slate-200"></div>
       </div>
     </div>
+  </section>
 
-    <div class="mt-5 text-center">
-      <a href="#" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-lg text-sm font-semibold shadow-md">
-        View Full Gallery
-      </a>
+  <!-- DATA DASHBOARD PREVIEW -->
+  <section class="bg-slate-50 border-t border-slate-200">
+    <div class="max-w-6xl mx-auto px-4 py-10">
+      <h2 class="text-xl md:text-2xl font-bold text-slate-900 mb-4">Data Dashboard Preview</h2>
+      <div class="grid md:grid-cols-4 gap-4">
+        <div class="bg-white border border-slate-200 rounded-xl p-3 text-xs">
+          <div class="font-semibold text-slate-800 mb-1">Concept Mastery</div>
+          <div class="h-20 bg-slate-100 rounded"></div>
+        </div>
+        <div class="bg-white border border-slate-200 rounded-xl p-3 text-xs">
+          <div class="font-semibold text-slate-800 mb-1">Attendance</div>
+          <div class="h-20 bg-slate-100 rounded"></div>
+        </div>
+        <div class="bg-white border border-slate-200 rounded-xl p-3 text-xs">
+          <div class="font-semibold text-slate-800 mb-1">Engagement</div>
+          <div class="h-20 bg-slate-100 rounded"></div>
+        </div>
+        <div class="bg-white border border-slate-200 rounded-xl p-3 text-xs">
+          <div class="font-semibold text-slate-800 mb-1">Career Aspirations</div>
+          <div class="h-20 bg-slate-100 rounded"></div>
+        </div>
+      </div>
     </div>
   </section>
 
   <!-- CONTACT / FOOTER -->
-  <section id="contact" class="bg-gray-800 text-white py-16 mt-8">
-    <div class="max-w-6xl mx-auto px-6 lg:px-8 text-center">
-      <p class="text-xl font-light max-w-4xl mx-auto mb-4 text-gray-300">
-        “Future Ready Learners- Leaders of Tomorrow”
-      </p>
-      <h3 class="text-xl font-bold mb-1">Rajgopal Venkateswaran</h3>
-      <p class="text-sm text-gray-400">Varsha Nagar MPS | Teach For India Fellow (2024–26)</p>
-
-      <div class="flex justify-center space-x-4 mt-6 text-sm">
-        <a href="https://www.linkedin.com" target="_blank" class="text-indigo-300 hover:text-indigo-100">LinkedIn</a>
-        <a href="mailto:your.email@example.com" class="text-indigo-300 hover:text-indigo-100">Email</a>
-        <a href="#" class="text-indigo-300 hover:text-indigo-100">Download Portfolio PDF</a>
+  <section id="contact" class="bg-white border-t border-slate-200">
+    <div class="max-w-6xl mx-auto px-4 py-10 text-center">
+      <p class="text-sm text-slate-500 mb-2">Teach For India Fellow, 2024–26</p>
+      <h3 class="text-lg md:text-xl font-semibold text-slate-900">Rajgopal Venkateswaran</h3>
+      <div class="mt-3 flex justify-center gap-4 text-sm">
+        <a href="#" class="text-indigo-600 hover:underline">LinkedIn</a>
+        <a href="mailto:your-email@example.com" class="text-indigo-600 hover:underline">Email</a>
+        <a href="#" class="text-indigo-600 hover:underline">Download Portfolio PDF</a>
       </div>
-
-      <p class="text-xs mt-8 text-gray-500">&copy; 2024 Academic Transformation Portfolio</p>
     </div>
   </section>
 
-  <!-- VIDEO MODAL -->
-  <div id="videoModal" class="modal-backdrop modal-hidden">
-    <div class="bg-black rounded-xl overflow-hidden max-w-3xl w-full mx-4 relative">
-      <button id="closeVideoModal" class="absolute top-2 right-2 text-white text-xl px-2">✕</button>
-      <div class="aspect-w-16 aspect-h-9">
-        <iframe
-          id="modalVideoFrame"
-          class="w-full h-[60vh]"
-          src=""
-          title="Class in Action"
-          frameborder="0"
-          allow="autoplay; encrypted-media"
-          allowfullscreen
-        ></iframe>
-      </div>
+  <footer class="bg-gray-800 text-white py-6">
+    <div class="max-w-6xl mx-auto px-6 lg:px-8 text-center">
+      <p class="text-xs text-gray-400">&copy; 2024 Academic Transformation Portfolio</p>
     </div>
-  </div>
+  </footer>
 
+  <!-- TIMELINE AUTO-SCROLL SCRIPT -->
   <script>
-    // Simple modal logic
-    const openBtn = document.getElementById('openVideoModal');
-    const closeBtn = document.getElementById('closeVideoModal');
-    const modal = document.getElementById('videoModal');
-    const modalFrame = document.getElementById('modalVideoFrame');
+    const container = document.querySelector('.timeline-scroll');
+    const cards = container.querySelectorAll('.timeline-card');
+    if (container && cards.length > 0) {
+      const cardWidth = cards[0].offsetWidth + 16; // width + approx gap
+      const maxScroll = container.scrollWidth - container.clientWidth;
 
-    if (openBtn && closeBtn && modal && modalFrame) {
-      openBtn.addEventListener('click', () => {
-        modal.classList.remove('modal-hidden');
-        modalFrame.src = "https://www.youtube.com/embed/TGjbV3XGtE8?autoplay=1&mute=0&controls=1&modestbranding=1&rel=0";
-      });
-
-      const closeModal = () => {
-        modal.classList.add('modal-hidden');
-        modalFrame.src = "";
-      };
-
-      closeBtn.addEventListener('click', closeModal);
-      modal.addEventListener('click', (e) => {
-        if (e.target === modal) closeModal();
-      });
+      setInterval(() => {
+        if (container.scrollLeft + cardWidth >= maxScroll) {
+          // reset to start (The Beginning)
+          container.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+          container.scrollBy({ left: cardWidth, behavior: 'smooth' });
+        }
+      }, 3000);
     }
   </script>
 
