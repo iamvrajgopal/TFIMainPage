@@ -339,65 +339,180 @@
       });
     }
 
-    setInterval(scrollStep, 3500);
+    setInterval(scrollStep, 2000);
   });
 </script>
 
 
-  <!-- THEMATIC PREVIEW CARDS -->
-  <section id="cards" class="max-w-6xl mx-auto px-6 lg:px-8 py-10">
-    <h2 class="text-2xl font-bold text-slate-900 mb-4">Explore the Journey</h2>
-    <p class="text-slate-600 text-sm md:text-base mb-6">
-      Dive into different dimensions of the fellowship journey — from entering the classroom to building tech-enabled solutions.
-    </p>
+<!-- CUSTOM ANIMATION STYLES FOR THEMATIC CARDS -->
+<style>
+  /* 3D tilt */
+  .card-tilt {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transform-style: preserve-3d;
+  }
+  .card-tilt:hover {
+    transform: perspective(800px) rotateX(3deg) rotateY(-3deg) scale(1.02);
+    box-shadow: 0 18px 30px rgba(0,0,0,0.15);
+  }
 
-    <div class="grid md:grid-cols-3 gap-5">
-      <!-- Card 1 -->
-      <a href="https://iamvrajgopal.github.io/Approach/" class="bg-white rounded-xl shadow-sm hover:shadow-md transition block overflow-hidden">
-        <img src="https://raw.githubusercontent.com/iamvrajgopal/TFIMainPage/main/PrevClass.jpg" class="w-full h-40 object-cover" alt="The Beginning">
-        <div class="p-4">
-          <h3 class="text-sm font-semibold text-slate-900">The Beginning</h3>
-          <p class="text-xs text-slate-600 mt-1">What the classroom looked like at the start — context, gaps and first steps.</p>
-        </div>
-      </a>
+  /* Image zoom */
+  .card-img {
+    transition: transform 0.5s ease;
+  }
+  .group:hover .card-img {
+    transform: scale(1.08);
+  }
 
-      <!-- Card 2 -->
-      <a href="https://iamvrajgopal.github.io/Approach/" class="bg-white rounded-xl shadow-sm hover:shadow-md transition block overflow-hidden">
-        <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/StemTinkering.jpg" class="w-full h-40 object-cover" alt="My Approach">
-        <div class="p-4">
-          <h3 class="text-sm font-semibold text-slate-900">My Approach</h3>
-          <p class="text-xs text-slate-600 mt-1">The Simplify–Visualize–Relate–Implement framework in classroom action.</p>
-        </div>
-      </a>
+  /* Sliding underline effect */
+  .title-underline {
+    position: relative;
+    display: inline-block;
+  }
+  .title-underline::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+    width: 0%;
+    height: 3px;
+    background-color: currentColor;
+    transition: width 0.3s ease;
+    border-radius: 2px;
+  }
+  .group:hover .title-underline::after {
+    width: 100%;
+  }
 
-      <!-- Card 3 -->
-      <a href="https://iamvrajgopal.github.io/futureReadyLearners/" class="bg-white rounded-xl shadow-sm hover:shadow-md transition block overflow-hidden">
-        <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/EmpathynService.jpg" class="w-full h-40 object-cover" alt="Future Ready Learners">
-        <div class="p-4">
-          <h3 class="text-sm font-semibold text-slate-900">Future Ready Learners</h3>
-          <p class="text-xs text-slate-600 mt-1">Responsibilities, leadership and class culture shaping students as leaders.</p>
-        </div>
-      </a>
+  /* Glow border effect */
+  .glow-sky:hover {
+    box-shadow: 0 0 18px rgba(56, 189, 248, 0.45); /* sky glow */
+  }
+  .glow-indigo:hover {
+    box-shadow: 0 0 18px rgba(129, 140, 248, 0.45); /* indigo glow */
+  }
+  .glow-emerald:hover {
+    box-shadow: 0 0 18px rgba(52, 211, 153, 0.45); /* emerald glow */
+  }
+  .glow-fuchsia:hover {
+    box-shadow: 0 0 18px rgba(232, 121, 249, 0.45); /* fuchsia glow */
+  }
+  .glow-amber:hover {
+    box-shadow: 0 0 18px rgba(251, 191, 36, 0.45); /* amber glow */
+  }
+</style>
 
-      <!-- Card 4 -->
-      <a href="https://iamvrajgopal.github.io/Impact/" class="bg-white rounded-xl shadow-sm hover:shadow-md transition block overflow-hidden">
-        <img src="https://raw.githubusercontent.com/iamvrajgopal/tfi_future_ready_v1/main/Impact.jpg" class="w-full h-40 object-cover" alt="Be the Change – Tech & AI">
-        <div class="p-4">
-          <h3 class="text-sm font-semibold text-slate-900">Be the Change – Tech &amp; AI</h3>
-          <p class="text-xs text-slate-600 mt-1">AI/ML, simulations and tech projects that connect learning to real-world problems.</p>
-        </div>
-      </a>
 
-      <!-- Card 5 -->
-      <a href="https://iamvrajgopal.github.io/impact_stories/" class="bg-white rounded-xl shadow-sm hover:shadow-md transition block overflow-hidden md:col-span-1">
-        <img src="https://raw.githubusercontent.com/iamvrajgopal/TFIMainPage/main/NAR.jpg" class="w-full h-40 object-cover" alt="Impact Stories">
-        <div class="p-4">
-          <h3 class="text-sm font-semibold text-slate-900">Impact Stories</h3>
-          <p class="text-xs text-slate-600 mt-1">From ideas to national awards — real-world problem solving by students.</p>
-        </div>
-      </a>
+<!-- EXPLORE THE JOURNEY – THEMATIC CARDS -->
+<section class="py-12 bg-white">
+  <div class="max-w-6xl mx-auto px-6 lg:px-8">
+
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-2xl font-bold text-slate-900">Explore the Journey</h2>
+      <span class="text-xs uppercase tracking-wide text-slate-400">Start anywhere</span>
     </div>
-  </section>
+
+    <div class="grid md:grid-cols-3 gap-6">
+
+      <!-- Card 1: The Beginning -->
+      <a href="beginning.html"
+         class="group bg-sky-50 border border-sky-100 rounded-2xl p-5 shadow-sm 
+                hover:shadow-xl transition-all duration-300 card-tilt glow-sky">
+
+        <img src="https://raw.githubusercontent.com/iamvrajgopal/TFIMainPage/main/PrevClass.jpg"
+             class="w-full h-40 object-cover rounded-xl mb-4 card-img">
+
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-lg font-semibold text-slate-900 title-underline">The Beginning</h3>
+          <span class="text-xs px-2 py-1 rounded-full bg-sky-100 text-sky-700">Start</span>
+        </div>
+
+        <p class="text-sm text-slate-600">
+          First impressions, student context, and the learning gaps observed.
+        </p>
+      </a>
+
+
+      <!-- Card 2: My Method -->
+      <a href="approach.html"
+         class="group bg-indigo-50 border border-indigo-100 rounded-2xl p-5 shadow-sm 
+                hover:shadow-xl transition-all duration-300 card-tilt glow-indigo">
+
+        <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/StemTinkering.jpg"
+             class="w-full h-40 object-cover rounded-xl mb-4 card-img">
+
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-lg font-semibold text-slate-900 title-underline">My Method</h3>
+          <span class="text-xs px-2 py-1 rounded-full bg-indigo-100 text-indigo-700">Pedagogy</span>
+        </div>
+
+        <p class="text-sm text-slate-600">
+          The Simplify • Visualize • Relate • Implement framework in action.
+        </p>
+      </a>
+
+
+      <!-- Card 3: Future Ready Learners -->
+      <a href="future-ready-learners.html"
+         class="group bg-emerald-50 border border-emerald-100 rounded-2xl p-5 shadow-sm 
+                hover:shadow-xl transition-all duration-300 card-tilt glow-emerald">
+
+        <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/EmpathynService.jpg"
+             class="w-full h-40 object-cover rounded-xl mb-4 card-img">
+
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-lg font-semibold text-slate-900 title-underline">Future Ready Learners</hh3>
+          <span class="text-xs px-2 py-1 rounded-full bg-emerald-100 text-emerald-700">Culture</span>
+        </div>
+
+        <p class="text-sm text-slate-600">
+          Leadership, empathy, teamwork and responsible learning culture.
+        </p>
+      </a>
+
+
+      <!-- Card 4: Tech & AI -->
+      <a href="tech-ai.html"
+         class="group bg-fuchsia-50 border border-fuchsia-100 rounded-2xl p-5 shadow-sm 
+                hover:shadow-xl transition-all duration-300 card-tilt glow-fuchsia">
+
+        <img src="https://raw.githubusercontent.com/iamvrajgopal/tfi_future_ready_v1/main/Impact.jpg"
+             class="w-full h-40 object-cover rounded-xl mb-4 card-img">
+
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-lg font-semibold text-slate-900 title-underline">Be the Change – Tech & AI</h3>
+          <span class="text-xs px-2 py-1 rounded-full bg-fuchsia-100 text-fuchsia-700">Innovation</span>
+        </div>
+
+        <p class="text-sm text-slate-600">
+          AI/ML projects, simulations and real-world problem solving using technology.
+        </p>
+      </a>
+
+
+      <!-- Card 5: Impact Stories -->
+      <a href="impact-stories.html"
+         class="group bg-amber-50 border border-amber-100 rounded-2xl p-5 shadow-sm 
+                hover:shadow-xl transition-all duration-300 card-tilt glow-amber">
+
+        <img src="https://raw.githubusercontent.com/iamvrajgopal/TFIMainPage/main/NAR.jpg"
+             class="w-full h-40 object-cover rounded-xl mb-4 card-img">
+
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-lg font-semibold text-slate-900 title-underline">Impact Stories</h3>
+          <span class="text-xs px-2 py-1 rounded-full bg-amber-100 text-amber-700">Impact</span>
+        </div>
+
+        <p class="text-sm text-slate-600">
+          Awards, recognition and the real-world change created by students.
+        </p>
+      </a>
+
+    </div>
+
+  </div>
+</section>
+
 
   <!-- QUOTE BAND -->
   <section id="quote" class="bg-gradient-to-r from-indigo-700 via-teal-600 to-emerald-500 py-10">
