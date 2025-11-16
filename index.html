@@ -74,15 +74,15 @@
       position: absolute;
       inset: 0;
       pointer-events: none;
-      background:
-        radial-gradient(circle at 15% 20%, rgba(79,70,229,0.35), transparent 55%),
-        radial-gradient(circle at 80% 80%, rgba(14,165,233,0.4), transparent 60%),
-        linear-gradient(to bottom, rgba(226,232,240,0.75), rgba(226,232,240,0.9));
-    }
+background:
+    radial-gradient(circle at 15% 20%, rgba(79,70,229,0.22), transparent 55%),
+    radial-gradient(circle at 80% 80%, rgba(14,165,233,0.20), transparent 60%),
+    linear-gradient(to bottom, rgba(255,255,255,0.25), rgba(255,255,255,0.35));
+}
 
     /* Light motion-blur effect when the user scrolls the page */
     .hero-blur {
-      filter: blur(4px) brightness(0.98);
+      filter: blur(1.2px) brightness(0.99);
     }
 
     /* MOBILE: show 1 image instead of 2 */
@@ -277,30 +277,32 @@
       </div>
 
       <!-- GRADIENT OVERLAY FOR THEME + READABILITY -->
-      <div class="hero-gradient-overlay"></div>
+      <div class="hero-gradient-overlay opacity-60"></div>
     </div>
 
-    <!-- TEXT SECTION -->
-    <div class="max-w-6xl mx-auto px-6 lg:px-8 py-10 lg:py-16 relative">
-      <div class="w-full lg:w-7/12">
-        <h1 class="text-4xl lg:text-5xl font-extrabold text-slate-900 mb-4 drop-shadow">
-          Teach For India Journey
-        </h1>
+<!-- TEXT SECTION OVER BANNER -->
+<div class="absolute inset-0 flex items-center">
+  <div class="max-w-6xl mx-auto px-6 lg:px-8">
+    <div class="w-full lg:w-7/12 bg-white/0">
+      <h1 class="text-4xl lg:text-5xl font-extrabold text-white drop-shadow-lg mb-4">
+        Teach For India Journey
+      </h1>
 
-        <p class="text-base text-slate-700 max-w-lg">
-          A two-year classroom story of curiosity, confidence and compassion.
-        </p>
+      <p class="text-base text-white/95 max-w-lg drop-shadow">
+        A two-year classroom story of curiosity, confidence and compassion.
+      </p>
 
-        <div class="mt-6">
-          <a href="#journey"
-             class="inline-flex items-center justify-center px-6 py-3 rounded-full 
-                    bg-indigo-600 text-white text-sm font-semibold shadow-md 
-                    hover:bg-indigo-700 transition">
-            Explore the Journey
-          </a>
-        </div>
+      <div class="mt-6">
+        <a href="#journey"
+           class="inline-flex items-center justify-center px-6 py-3 rounded-full
+                  bg-indigo-600 text-white text-sm font-semibold shadow-lg
+                  hover:bg-indigo-700 transition">
+          Explore the Journey
+        </a>
       </div>
     </div>
+  </div>
+</div>
   </section>
 
   <!-- HERO SCRIPT -->
