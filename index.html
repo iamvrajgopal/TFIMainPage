@@ -115,50 +115,97 @@
     </div>
   </nav>
 
-<!-- HERO SECTION -->
-<section class="relative bg-sky-50">
-  <div class="max-w-6xl mx-auto px-6 lg:px-8 py-10 lg:py-16 flex flex-col-reverse lg:flex-row items-center gap-10">
-    
-    <!-- TEXT -->
-    <div class="w-full lg:w-5/12 text-center lg:text-left">
-      <h1 class="text-4xl lg:text-5xl font-extrabold text-slate-900 mb-4">
+<!-- HERO SECTION — AUTO-SCROLLING IMAGE BANNER -->
+<section class="relative bg-sky-50 overflow-hidden">
+
+  <!-- SCROLLING BACKGROUND WRAPPER -->
+  <div class="relative w-full overflow-hidden h-[340px] lg:h-[420px]">
+
+    <!-- IMAGE STRIP (scrolls left → right) -->
+    <div id="heroScroll" class="flex absolute top-0 left-0 h-full">
+
+      <!-- Each image: same height, responsive -->
+      <img src="https://raw.githubusercontent.com/iamvrajgopal/TFIMainPage/main/Leaders.jpg" 
+           class="object-cover w-1/2 h-full opacity-90" />
+
+      <img src="https://raw.githubusercontent.com/iamvrajgopal/tfi_future_ready_v1/main/CCL%20collagej.jpg" 
+           class="object-cover w-1/2 h-full opacity-90" />
+
+      <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/StemTinkering.jpg" 
+           class="object-cover w-1/2 h-full opacity-90" />
+
+      <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/VNPL.jpeg" 
+           class="object-cover w-1/2 h-full opacity-90" />
+
+      <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/EmpathynService.jpg" 
+           class="object-cover w-1/2 h-full opacity-90" />
+
+      <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/IPL.jpeg" 
+           class="object-cover w-1/2 h-full opacity-90" />
+
+      <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/techSolution.jpg" 
+           class="object-cover w-1/2 h-full opacity-90" />
+
+      <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/Artwork.jpeg" 
+           class="object-cover w-1/2 h-full opacity-90" />
+
+      <!-- Duplicate for smooth continuous looping -->
+      <img src="https://raw.githubusercontent.com/iamvrajgopal/TFIMainPage/main/Leaders.jpg" 
+           class="object-cover w-1/2 h-full opacity-90" />
+      <img src="https://raw.githubusercontent.com/iamvrajgopal/tfi_future_ready_v1/main/CCL%20collagej.jpg" 
+           class="object-cover w-1/2 h-full opacity-90" />
+
+    </div>
+
+    <!-- LIGHT OVERLAY FOR TEXT READABILITY -->
+    <div class="absolute inset-0 bg-sky-50/60 backdrop-blur-[1px]"></div>
+  </div>
+
+  <!-- TEXT SECTION -->
+  <div class="max-w-6xl mx-auto px-6 lg:px-8 py-10 lg:py-16 relative">
+    <div class="w-full lg:w-7/12">
+      <h1 class="text-4xl lg:text-5xl font-extrabold text-slate-900 mb-4 drop-shadow">
         Teach For India Journey
       </h1>
 
-      <p class="text-base text-slate-600 max-w-md mx-auto lg:mx-0">
-        A two-year classroom story of curiosity, confidence, and compassion.
+      <p class="text-base text-slate-700 max-w-lg">
+        A two-year classroom story of curiosity, confidence and compassion.
       </p>
 
-      <div class="mt-6 flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
-        <a href="#journey" 
-           class="inline-flex items-center justify-center px-5 py-3 rounded-full bg-indigo-600 text-white text-sm font-semibold shadow-md hover:bg-indigo-700 transition">
+      <div class="mt-6">
+        <a href="#journey"
+           class="inline-flex items-center justify-center px-6 py-3 rounded-full 
+                  bg-indigo-600 text-white text-sm font-semibold shadow-md 
+                  hover:bg-indigo-700 transition">
           Explore the Journey
         </a>
       </div>
     </div>
-
-    <!-- VIDEO (YouTube Embedded, Wider Layout) -->
-    <div class="w-full lg:w-7/12">
-      <div class="relative rounded-2xl overflow-hidden shadow-xl border border-sky-100 bg-sky-100">
-
-        <!-- Responsive YouTube Embed -->
-        <div class="aspect-w-16 aspect-h-9">
-          <iframe 
-            src="https://www.youtube.com/embed/TGjbV3XGtE8?autoplay=1&mute=1&loop=1&playlist=TGjbV3XGtE8&controls=0&modestbranding=1&showinfo=0" 
-            title="Classroom Video" 
-            class="w-full h-full"
-            frameborder="0" 
-            allow="autoplay; encrypted-media" 
-            allowfullscreen>
-          </iframe>
-        </div>
-
-        <div class="absolute inset-0 bg-gradient-to-tr from-sky-900/20 to-transparent pointer-events-none"></div>
-      </div>
-    </div>
-
   </div>
 </section>
+
+<!-- AUTO-SCROLL SCRIPT -->
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const strip = document.getElementById("heroScroll");
+    let position = 0;
+    const speed = 0.4; // lower = slower
+
+    function scrollImages() {
+      position -= speed;
+      strip.style.transform = `translateX(${position}px)`;
+
+      // Reset when fully off-screen
+      if (Math.abs(position) > strip.scrollWidth / 2) {
+        position = 0;
+      }
+      requestAnimationFrame(scrollImages);
+    }
+
+    scrollImages();
+  });
+</script>
+
 
 
 
