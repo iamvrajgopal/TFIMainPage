@@ -1,44 +1,665 @@
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const strip = document.getElementById("heroScroll");
-    const parallaxWrapper = document.querySelector(".hero-parallax");
-    let position = 0;
-    const speed = 0.4; // horizontal scroll speed
-    let blurTimeout = null;
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Future Ready Learners – Main Journey</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 
-    function scrollImages() {
-      position -= speed;
-      strip.style.transform = `translateX(${position}px)`;
+  <style>
+    body { font-family:'Poppins',sans-serif; background:#f8fbfd; color:#0f172a; }
 
-      // subtle global fade effect as we move through pairs
-      const fadeFactor = 0.85 + 0.15 * Math.sin(position / 120);
-      strip.style.opacity = fadeFactor;
-
-      // Reset loop when half the strip has moved
-      if (Math.abs(position) > strip.scrollWidth / 2) {
-        position = 0;
-      }
-      requestAnimationFrame(scrollImages);
+    /* Hero video background (legacy, safe to keep even if unused) */
+    .hero-video-container {
+      position:relative;
+      height:70vh;
+      min-height:360px;
+      overflow:hidden;
+      background:#020617;
+    }
+    .hero-video-container iframe {
+      position:absolute;
+      top:50%; left:50%;
+      width:120%; height:120%;
+      transform:translate(-50%,-50%);
+      pointer-events:none;
+    }
+    .hero-overlay {
+      position:relative;
+      z-index:10;
+      height:100%;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:flex-start;
+      padding:1.5rem;
+      background:linear-gradient(to right,rgba(15,23,42,0.85),rgba(15,23,42,0.05));
+      color:white;
     }
 
-    scrollImages();
+    :root {
+      --hero-light: #e0f2fe;   /* light sky */
+      --hero-dark: #1e293b;    /* slate-800 */
+      --hero-accent: #4f46e5;  /* indigo-600 */
+      --hero-accent2: #0ea5e9; /* sky-500 */
+    }
 
-    // Parallax effect on vertical scroll + motion blur during scroll
-    window.addEventListener("scroll", () => {
-      const scrollY = window.scrollY || window.pageYOffset;
+    /* HERO WRAPPER */
+    .hero-section {
+      background: var(--hero-light);
+      position: relative;
+      overflow: hidden;
+    }
 
-      // vertical parallax — hero moves slightly slower than page
-      if (parallaxWrapper) {
-        parallaxWrapper.style.transform = `translateY(${scrollY * 0.08}px)`;
+    /* Strip of images that scrolls */
+    #heroScroll {
+      will-change: transform, filter, opacity;
+      transition: filter 0.5s ease-out, opacity 1.5s ease-in-out;
+    }
+
+    /* Individual hero images */
+    #heroScroll img {
+      transition: opacity 1.5s ease-in-out, transform 1.5s ease-in-out;
+    }
+
+    /* Parallax wrapper – moves slightly on page scroll */
+    .hero-parallax {
+      will-change: transform;
+      transition: transform 0.3s ease-out;
+    }
+
+    /* Gradient overlay on top of images for better text contrast */
+    .hero-gradient-overlay {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 15% 20%, rgba(79,70,229,0.35), transparent 55%),
+        radial-gradient(circle at 80% 80%, rgba(14,165,233,0.4), transparent 60%),
+        linear-gradient(to bottom, rgba(226,232,240,0.75), rgba(226,232,240,0.9));
+    }
+
+    /* Light motion-blur effect when the user scrolls the page */
+    .hero-blur {
+      filter: blur(4px) brightness(0.98);
+    }
+
+    /* MOBILE: show 1 image instead of 2 */
+    @media (max-width: 768px) {
+      #heroScroll img {
+        width: 100% !important;
+      }
+    }
+
+    /* Slightly taller hero on large screens */
+    @media (min-width: 1024px) {
+      .hero-height {
+        height: 460px;
+      }
+    }
+
+    /* Timeline horizontal scroll */
+    .timeline-track {
+      display:flex;
+      gap:1rem;
+      overflow-x:auto;
+      padding-bottom:0.5rem;
+      scroll-snap-type:x mandatory;
+    }
+    .timeline-card {
+      min-width:210px;
+      max-width:230px;
+      scroll-snap-align:start;
+    }
+
+    /* Gallery auto sliding */
+    .gallery-strip {
+      overflow:hidden;
+    }
+    .gallery-track {
+      display:flex;
+      gap:12px;
+      animation:gallery-scroll 35s linear infinite;
+      width:max-content;
+    }
+    .gallery-track img {
+      height:180px;
+      width:auto;
+      border-radius:10px;
+      object-fit:cover;
+      box-shadow:0 8px 20px rgba(15,23,42,0.18);
+    }
+    .gallery-strip:hover .gallery-track {
+      animation-play-state:paused;
+    }
+    @keyframes gallery-scroll {
+      0% { transform:translateX(0); }
+      100% { transform:translateX(-50%); }
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position:fixed;
+      inset:0;
+      background:rgba(15,23,42,0.85);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      z-index:50;
+    }
+    .modal-hidden { display:none; }
+
+    /* THEMATIC CARD ANIMATIONS */
+
+    /* 3D tilt */
+    .card-tilt {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      transform-style: preserve-3d;
+    }
+    .card-tilt:hover {
+      transform: perspective(800px) rotateX(3deg) rotateY(-3deg) scale(1.02);
+      box-shadow: 0 18px 30px rgba(0,0,0,0.15);
+    }
+
+    /* Image zoom */
+    .card-img {
+      transition: transform 0.5s ease;
+    }
+    .group:hover .card-img {
+      transform: scale(1.08);
+    }
+
+    /* Sliding underline effect */
+    .title-underline {
+      position: relative;
+      display: inline-block;
+    }
+    .title-underline::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -3px;
+      width: 0%;
+      height: 3px;
+      background-color: currentColor;
+      transition: width 0.3s ease;
+      border-radius: 2px;
+    }
+    .group:hover .title-underline::after {
+      width: 100%;
+    }
+
+    /* Glow border effect */
+    .glow-sky:hover {
+      box-shadow: 0 0 18px rgba(56, 189, 248, 0.45);
+    }
+    .glow-indigo:hover {
+      box-shadow: 0 0 18px rgba(129, 140, 248, 0.45);
+    }
+    .glow-emerald:hover {
+      box-shadow: 0 0 18px rgba(52, 211, 153, 0.45);
+    }
+    .glow-fuchsia:hover {
+      box-shadow: 0 0 18px rgba(232, 121, 249, 0.45);
+    }
+    .glow-amber:hover {
+      box-shadow: 0 0 18px rgba(251, 191, 36, 0.45);
+    }
+  </style>
+</head>
+
+<body class="bg-slate-50">
+
+  <!-- NAVBAR -->
+  <nav class="bg-white/90 backdrop-blur shadow-sm sticky top-0 z-40">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+      <!-- Logo / Name -->
+      <div class="flex items-center space-x-2">
+        <span class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-indigo-600 text-white text-lg font-bold">R</span>
+        <div class="leading-tight">
+          <div class="font-semibold text-slate-900 text-sm">Future Ready Learners</div>
+          <div class="text-xs text-slate-500">Teach For India Journey</div>
+        </div>
+      </div>
+      <!-- Links -->
+      <div class="hidden md:flex items-center space-x-5 text-sm font-medium">
+        <a href="#hero" class="text-slate-700 hover:text-indigo-600">Home</a>
+        <a href="https://iamvrajgopal.github.io/Approach/" class="text-slate-700 hover:text-indigo-600">The Beginning</a>
+        <a href="https://iamvrajgopal.github.io/Approach/" class="text-slate-700 hover:text-indigo-600">My Method</a>
+        <a href="https://iamvrajgopal.github.io/Impact/" class="text-slate-700 hover:text-indigo-600">Tech &amp; AI</a>
+        <a href="https://iamvrajgopal.github.io/impact_stories/" class="text-slate-700 hover:text-indigo-600">Impact Stories</a>
+        <a href="#quote" class="text-slate-700 hover:text-indigo-600">Reflections</a>
+        <a href="#contact" class="text-slate-700 hover:text-indigo-600">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO SECTION — AUTO-SCROLLING IMAGE BANNER -->
+  <section id="hero" class="relative hero-section overflow-hidden">
+
+    <!-- SCROLLING BACKGROUND WRAPPER WITH PARALLAX -->
+    <div class="relative w-full overflow-hidden h-[340px] lg:h-[420px] hero-parallax hero-height">
+
+      <!-- IMAGE STRIP (scrolls left → right) -->
+      <div id="heroScroll" class="flex absolute top-0 left-0 h-full">
+
+        <img src="https://raw.githubusercontent.com/iamvrajgopal/TFIMainPage/main/Leaders.jpg"
+             class="object-cover w-1/2 h-full opacity-90" />
+
+        <img src="https://raw.githubusercontent.com/iamvrajgopal/tfi_future_ready_v1/main/CCL%20collagej.jpg"
+             class="object-cover w-1/2 h-full opacity-90" />
+
+        <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/StemTinkering.jpg"
+             class="object-cover w-1/2 h-full opacity-90" />
+
+        <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/VNPL.jpeg"
+             class="object-cover w-1/2 h-full opacity-90" />
+
+        <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/EmpathynService.jpg"
+             class="object-cover w-1/2 h-full opacity-90" />
+
+        <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/IPL.jpeg"
+             class="object-cover w-1/2 h-full opacity-90" />
+
+        <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/techSolution.jpg"
+             class="object-cover w-1/2 h-full opacity-90" />
+
+        <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/Artwork.jpeg"
+             class="object-cover w-1/2 h-full opacity-90" />
+
+        <!-- Duplicate for smooth continuous looping -->
+        <img src="https://raw.githubusercontent.com/iamvrajgopal/TFIMainPage/main/Leaders.jpg"
+             class="object-cover w-1/2 h-full opacity-90" />
+        <img src="https://raw.githubusercontent.com/iamvrajgopal/tfi_future_ready_v1/main/CCL%20collagej.jpg"
+             class="object-cover w-1/2 h-full opacity-90" />
+
+      </div>
+
+      <!-- GRADIENT OVERLAY FOR THEME + READABILITY -->
+      <div class="hero-gradient-overlay"></div>
+    </div>
+
+    <!-- TEXT SECTION -->
+    <div class="max-w-6xl mx-auto px-6 lg:px-8 py-10 lg:py-16 relative">
+      <div class="w-full lg:w-7/12">
+        <h1 class="text-4xl lg:text-5xl font-extrabold text-slate-900 mb-4 drop-shadow">
+          Teach For India Journey
+        </h1>
+
+        <p class="text-base text-slate-700 max-w-lg">
+          A two-year classroom story of curiosity, confidence and compassion.
+        </p>
+
+        <div class="mt-6">
+          <a href="#journey"
+             class="inline-flex items-center justify-center px-6 py-3 rounded-full 
+                    bg-indigo-600 text-white text-sm font-semibold shadow-md 
+                    hover:bg-indigo-700 transition">
+            Explore the Journey
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HERO SCRIPT -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const strip = document.getElementById("heroScroll");
+      const parallaxWrapper = document.querySelector(".hero-parallax");
+      if (!strip) return;
+
+      let position = 0;
+      const speed = 0.4;
+      let blurTimeout = null;
+
+      function scrollImages() {
+        position -= speed;
+        strip.style.transform = `translateX(${position}px)`;
+
+        const fadeFactor = 0.85 + 0.15 * Math.sin(position / 120);
+        strip.style.opacity = fadeFactor;
+
+        if (Math.abs(position) > strip.scrollWidth / 2) {
+          position = 0;
+        }
+        requestAnimationFrame(scrollImages);
       }
 
-      // add blur while scrolling, then remove after short delay
-      if (!strip) return;
-      strip.classList.add("hero-blur");
-      if (blurTimeout) clearTimeout(blurTimeout);
-      blurTimeout = setTimeout(() => {
-        strip.classList.remove("hero-blur");
-      }, 180);
+      scrollImages();
+
+      window.addEventListener("scroll", () => {
+        const scrollY = window.scrollY || window.pageYOffset;
+        if (parallaxWrapper) {
+          parallaxWrapper.style.transform = `translateY(${scrollY * 0.08}px)`;
+        }
+
+        strip.classList.add("hero-blur");
+        if (blurTimeout) clearTimeout(blurTimeout);
+        blurTimeout = setTimeout(() => {
+          strip.classList.remove("hero-blur");
+        }, 180);
+      });
     });
-  });
-</script>
+  </script>
+
+  <!-- IMPACT SNAPSHOT -->
+  <section class="max-w-6xl mx-auto px-6 lg:px-8 py-10">
+    <h2 class="text-2xl font-bold text-slate-900 mb-4">Impact Snapshot</h2>
+    <p class="text-slate-600 mb-6 text-sm md:text-base">
+      A quick overview of what this journey has meant for students in Varsha Nagar MPS.
+    </p>
+
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+      <div class="bg-white rounded-xl shadow-sm p-4 text-center">
+        <div class="text-2xl font-bold text-indigo-600">300+</div>
+        <div class="text-xs text-slate-500 mt-1">Hands-on experiments explored</div>
+      </div>
+      <div class="bg-white rounded-xl shadow-sm p-4 text-center">
+        <div class="text-2xl font-bold text-emerald-600">20</div>
+        <div class="text-xs text-slate-500 mt-1">Students in national AI competition</div>
+      </div>
+      <div class="bg-white rounded-xl shadow-sm p-4 text-center">
+        <div class="text-2xl font-bold text-amber-500">2</div>
+        <div class="text-xs text-slate-500 mt-1">National recognitions</div>
+      </div>
+      <div class="bg-white rounded-xl shadow-sm p-4 text-center">
+        <div class="text-2xl font-bold text-violet-500">25%</div>
+        <div class="text-xs text-slate-500 mt-1">Aspiring to build AI ventures</div>
+      </div>
+      <div class="bg-white rounded-xl shadow-sm p-4 text-center">
+        <div class="text-2xl font-bold text-teal-500">80%</div>
+        <div class="text-xs text-slate-500 mt-1">Reported better concept clarity</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- JOURNEY TIMELINE (auto-scrolling) -->
+  <section id="journey" class="bg-sky-50 py-10">
+    <div class="max-w-6xl mx-auto px-6 lg:px-8">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-2xl font-bold text-slate-900">Journey Timeline</h2>
+        <a href="journey.html" class="text-sm font-semibold text-indigo-600 hover:text-indigo-700">
+          Explore Full Journey →
+        </a>
+      </div>
+
+      <p class="text-sm text-slate-600 mb-4">
+        Scroll through key moments from entering the classroom to building future-ready learners.
+      </p>
+
+      <div class="relative">
+        <div id="timelineContainer" class="flex overflow-hidden gap-4 px-1">
+
+          <div class="timeline-card min-w-[33.333%] max-w-[33.333%] bg-white rounded-xl shadow-sm border border-sky-100 p-4">
+            <img src="https://raw.githubusercontent.com/iamvrajgopal/TFIMainPage/main/PrevClass.jpg"
+                 class="w-full h-36 object-cover rounded-lg mb-3" />
+            <h3 class="text-sm font-semibold text-sky-700 mb-1">2024</h3>
+            <p class="text-xs font-semibold text-slate-700 mb-1">Entering the Classroom</p>
+            <p class="text-xs text-slate-500">
+              Understanding student context, learning levels and building first connections.
+            </p>
+          </div>
+
+          <div class="timeline-card min-w-[33.333%] max-w-[33.333%] bg-white rounded-xl shadow-sm border border-sky-100 p-4">
+            <img src="https://raw.githubusercontent.com/iamvrajgopal/TFIMainPage/main/SVRI.jpg"
+                 class="w-full h-36 object-cover rounded-lg mb-3" />
+            <h3 class="text-sm font-semibold text-sky-700 mb-1">2024–25</h3>
+            <p class="text-xs font-semibold text-slate-700 mb-1">Simplify • Visualize • Relate • Implement</p>
+            <p class="text-xs text-slate-500">
+              Rebuilding fundamentals through hands-on, visual and relatable learning experiences.
+            </p>
+          </div>
+
+          <div class="timeline-card min-w-[33.333%] max-w-[33.333%] bg-white rounded-xl shadow-sm border border-sky-100 p-4">
+            <img src="https://raw.githubusercontent.com/iamvrajgopal/TFIMainPage/main/btcp.jpg"
+                 class="w-full h-36 object-cover rounded-lg mb-3" />
+            <h3 class="text-sm font-semibold text-sky-700 mb-1">2025</h3>
+            <p class="text-xs font-semibold text-slate-700 mb-1">Be the Change – AI/ML</p>
+            <p class="text-xs text-slate-500">
+              Students design AI/ML projects to solve real-world problems using technology.
+            </p>
+          </div>
+
+          <div class="timeline-card min-w-[33.333%] max-w-[33.333%] bg-white rounded-xl shadow-sm border border-sky-100 p-4">
+            <img src="https://raw.githubusercontent.com/iamvrajgopal/TFIMainPage/main/NAR.jpg"
+                 class="w-full h-36 object-cover rounded-lg mb-3" />
+            <h3 class="text-sm font-semibold text-sky-700 mb-1">2025</h3>
+            <p class="text-xs font-semibold text-slate-700 mb-1">National Recognition</p>
+            <p class="text-xs text-slate-500">
+              Projects reach national competitions and students present to global leaders.
+            </p>
+          </div>
+
+          <div class="timeline-card min-w-[33.333%] max-w-[33.333%] bg-white rounded-xl shadow-sm border border-sky-100 p-4">
+            <img src="https://raw.githubusercontent.com/iamvrajgopal/TFIMainPage/main/GroupJoy.jpg"
+                 class="w-full h-36 object-cover rounded-lg mb-3" />
+            <h3 class="text-sm font-semibold text-sky-700 mb-1">2025+</h3>
+            <p class="text-xs font-semibold text-slate-700 mb-1">Future Ready Learners</p>
+            <p class="text-xs text-slate-500">
+              Students emerge as confident, curious and socially conscious problem-solvers.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TIMELINE AUTO-SCROLL SCRIPT -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const container = document.getElementById('timelineContainer');
+      if (!container) return;
+
+      const cards = container.querySelectorAll('.timeline-card');
+      if (!cards.length) return;
+
+      let index = 0;
+
+      function scrollStep() {
+        const cardWidth = cards[0].offsetWidth + 16; // gap
+        index = (index + 1) % cards.length;
+        container.scrollTo({
+          left: cardWidth * index,
+          behavior: 'smooth'
+        });
+      }
+
+      setInterval(scrollStep, 2000);
+    });
+  </script>
+
+  <!-- EXPLORE THE JOURNEY – THEMATIC CARDS -->
+  <section class="py-12 bg-white">
+    <div class="max-w-6xl mx-auto px-6 lg:px-8">
+
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-2xl font-bold text-slate-900">Explore the Journey</h2>
+        <span class="text-xs uppercase tracking-wide text-slate-400">Start anywhere</span>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6">
+
+        <!-- Card 1 -->
+        <a href="beginning.html"
+           class="group bg-sky-50 border border-sky-100 rounded-2xl p-5 shadow-sm 
+                  hover:shadow-xl transition-all duration-300 card-tilt glow-sky">
+          <img src="https://raw.githubusercontent.com/iamvrajgopal/TFIMainPage/main/PrevClass.jpg"
+               class="w-full h-40 object-cover rounded-xl mb-4 card-img">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-lg font-semibold text-slate-900 title-underline">The Beginning</h3>
+            <span class="text-xs px-2 py-1 rounded-full bg-sky-100 text-sky-700">Start</span>
+          </div>
+          <p class="text-sm text-slate-600">
+            First impressions, student context, and the learning gaps observed.
+          </p>
+        </a>
+
+        <!-- Card 2 -->
+        <a href="approach.html"
+           class="group bg-indigo-50 border border-indigo-100 rounded-2xl p-5 shadow-sm 
+                  hover:shadow-xl transition-all duration-300 card-tilt glow-indigo">
+          <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/StemTinkering.jpg"
+               class="w-full h-40 object-cover rounded-xl mb-4 card-img">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-lg font-semibold text-slate-900 title-underline">My Method</h3>
+            <span class="text-xs px-2 py-1 rounded-full bg-indigo-100 text-indigo-700">Pedagogy</span>
+          </div>
+          <p class="text-sm text-slate-600">
+            The Simplify • Visualize • Relate • Implement framework in action.
+          </p>
+        </a>
+
+        <!-- Card 3 -->
+        <a href="future-ready-learners.html"
+           class="group bg-emerald-50 border border-emerald-100 rounded-2xl p-5 shadow-sm 
+                  hover:shadow-xl transition-all duration-300 card-tilt glow-emerald">
+          <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/EmpathynService.jpg"
+               class="w-full h-40 object-cover rounded-xl mb-4 card-img">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-lg font-semibold text-slate-900 title-underline">Future Ready Learners</h3>
+            <span class="text-xs px-2 py-1 rounded-full bg-emerald-100 text-emerald-700">Culture</span>
+          </div>
+          <p class="text-sm text-slate-600">
+            Leadership, empathy, teamwork and responsible learning culture.
+          </p>
+        </a>
+
+        <!-- Card 4 -->
+        <a href="tech-ai.html"
+           class="group bg-fuchsia-50 border border-fuchsia-100 rounded-2xl p-5 shadow-sm 
+                  hover:shadow-xl transition-all duration-300 card-tilt glow-fuchsia">
+          <img src="https://raw.githubusercontent.com/iamvrajgopal/tfi_future_ready_v1/main/Impact.jpg"
+               class="w-full h-40 object-cover rounded-xl mb-4 card-img">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-lg font-semibold text-slate-900 title-underline">Be the Change – Tech &amp; AI</h3>
+            <span class="text-xs px-2 py-1 rounded-full bg-fuchsia-100 text-fuchsia-700">Innovation</span>
+          </div>
+          <p class="text-sm text-slate-600">
+            AI/ML projects, simulations and real-world problem solving using technology.
+          </p>
+        </a>
+
+        <!-- Card 5 -->
+        <a href="impact-stories.html"
+           class="group bg-amber-50 border border-amber-100 rounded-2xl p-5 shadow-sm 
+                  hover:shadow-xl transition-all duration-300 card-tilt glow-amber">
+          <img src="https://raw.githubusercontent.com/iamvrajgopal/TFIMainPage/main/NAR.jpg"
+               class="w-full h-40 object-cover rounded-xl mb-4 card-img">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-lg font-semibold text-slate-900 title-underline">Impact Stories</h3>
+            <span class="text-xs px-2 py-1 rounded-full bg-amber-100 text-amber-700">Impact</span>
+          </div>
+          <p class="text-sm text-slate-600">
+            Awards, recognition and the real-world change created by students.
+          </p>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- QUOTE BAND -->
+  <section id="quote" class="bg-gradient-to-r from-indigo-700 via-teal-600 to-emerald-500 py-10">
+    <div class="max-w-4xl mx-auto px-6 text-center text-white">
+      <p class="text-lg md:text-xl font-light">“Transformation begins when curiosity meets care.”</p>
+    </div>
+  </section>
+
+  <!-- GALLERY PREVIEW STRIP -->
+  <section class="max-w-6xl mx-auto px-6 lg:px-8 py-10">
+    <h2 class="text-2xl font-bold text-slate-900 mb-4">Gallery Preview</h2>
+    <p class="text-slate-600 text-sm md:text-base mb-4">
+      Glimpses from experiments, AI projects, competitions, sports and celebrations.
+    </p>
+
+    <div class="gallery-strip bg-slate-900/90 rounded-2xl p-4">
+      <div class="gallery-track">
+        <img src="https://raw.githubusercontent.com/iamvrajgopal/TFIMainPage/main/Leaders.jpg" alt="Leaders">
+        <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/StudentActivity.jpeg" alt="Student activity">
+        <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/EmpathynService.jpg" alt="Empathy & Service">
+        <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/DiwaliPrepCollage.jpg" alt="Diwali prep">
+        <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/StemTinkering.jpg" alt="STEM tinkering">
+        <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/techSolution.jpg" alt="Tech solution">
+        <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/VNPL.jpeg" alt="VNPL">
+        <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/IPL.jpeg" alt="IPL visit">
+        <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/Artwork.jpeg" alt="Artwork">
+        <!-- duplicate -->
+        <img src="https://raw.githubusercontent.com/iamvrajgopal/TFIMainPage/main/Leaders.jpg" alt="">
+        <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/StudentActivity.jpeg" alt="">
+        <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/EmpathynService.jpg" alt="">
+        <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/DiwaliPrepCollage.jpg" alt="">
+        <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/StemTinkering.jpg" alt="">
+        <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/techSolution.jpg" alt="">
+        <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/VNPL.jpeg" alt="">
+        <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/IPL.jpeg" alt="">
+        <img src="https://raw.githubusercontent.com/iamvrajgopal/futurereadylearners/main/Artwork.jpeg" alt="">
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT / FOOTER -->
+  <section id="contact" class="bg-gray-800 text-white py-16 mt-8">
+    <div class="max-w-6xl mx-auto px-6 lg:px-8 text-center">
+      <p class="text-xl font-light max-w-4xl mx-auto mb-4 text-gray-300">
+        “Future Ready Learners- Leaders of Tomorrow”
+      </p>
+      <h3 class="text-xl font-bold mb-1">Rajgopal Venkateswaran</h3>
+      <p class="text-sm text-gray-400">Varsha Nagar MPS | Teach For India Fellow (2024–26)</p>
+
+      <div class="flex justify-center space-x-4 mt-6 text-sm">
+        <a href="https://www.linkedin.com" target="_blank" class="text-indigo-300 hover:text-indigo-100">LinkedIn</a>
+        <a href="mailto:your.email@example.com" class="text-indigo-300 hover:text-indigo-100">Email</a>
+        <a href="#" class="text-indigo-300 hover:text-indigo-100">Download Portfolio PDF</a>
+      </div>
+
+      <p class="text-xs mt-8 text-gray-500">&copy; 2024 Academic Transformation Portfolio</p>
+    </div>
+  </section>
+
+  <!-- (Optional) VIDEO MODAL SCRIPT STAYS SAFE – GUARDED BY 'if (openBtn...)' -->
+  <div id="videoModal" class="modal-backdrop modal-hidden">
+    <div class="bg-black rounded-xl overflow-hidden max-w-3xl w-full mx-4 relative">
+      <button id="closeVideoModal" class="absolute top-2 right-2 text-white text-xl px-2">✕</button>
+      <div class="aspect-w-16 aspect-h-9">
+        <iframe
+          id="modalVideoFrame"
+          class="w-full h-[60vh]"
+          src=""
+          title="Class in Action"
+          frameborder="0"
+          allow="autoplay; encrypted-media"
+          allowfullscreen
+        ></iframe>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const openBtn = document.getElementById('openVideoModal');
+    const closeBtn = document.getElementById('closeVideoModal');
+    const modal = document.getElementById('videoModal');
+    const modalFrame = document.getElementById('modalVideoFrame');
+
+    if (openBtn && closeBtn && modal && modalFrame) {
+      openBtn.addEventListener('click', () => {
+        modal.classList.remove('modal-hidden');
+        modalFrame.src = "https://www.youtube.com/embed/TGjbV3XGtE8?autoplay=1&mute=0&controls=1&modestbranding=1&rel=0";
+      });
+
+      const closeModal = () => {
+        modal.classList.add('modal-hidden');
+        modalFrame.src = "";
+      };
+
+      closeBtn.addEventListener('click', closeModal);
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+      });
+    }
+  </script>
+
+</body>
+</html>
